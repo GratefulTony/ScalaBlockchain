@@ -16,18 +16,18 @@ import scalaj.http.{HttpOptions, Http}
 
 object BlockchainInfoApi extends BlockchainApi{
   def getOutgoingTransactions(a:Address):Seq[Transaction] = {
-    val res = Http.get( """http://blockchain.info/rawaddr/""" + in).option(HttpOptions.connTimeout(1000)).option(HttpOptions.readTimeout(5000)).asString
+    val res = Http.get( """http://blockchain.info/rawaddr/""" + a.toString).option(HttpOptions.connTimeout(1000)).option(HttpOptions.readTimeout(5000)).asString
     parse(res).\("txs").children.toArray.map {
       c =>
         val fs = c.\("out").children.toArray
 
         fs.map(cc =>
 
-          Transaction(
-            c.toString,
-            cc.\("addr").toString,
-            cc.\("value").values.toString.toDouble)
-        )
+//          Transaction(
+//            c.toString,
+//            cc.\("addr").toString,
+//            cc.\("value").values.toString.toDouble)
+//        )
 
     }.toSeq.flatten.toSeq
   }
