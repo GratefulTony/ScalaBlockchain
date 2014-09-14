@@ -7,6 +7,9 @@ package ScalaBlockchain.blockchain.address
  * Time: 9:08 PM
  * To change this template use File | Settings | File Templates.
  */
-trait Address {
 
+
+
+trait Address {
+  def stringVal
 }
