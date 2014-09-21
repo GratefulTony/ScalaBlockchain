@@ -18,11 +18,11 @@ object BlockchainAPIDemo extends App {
 
   import BlockchainInfoApi._
 
-  println(getTransactions(Address("15JvRK9BJHUtqxDyrihxphX1e8e4fdjb4o")).map(a=>(a.result(Address("15JvRK9BJHUtqxDyrihxphX1e8e4fdjb4o")))).sum)
+  println(getTransactions(Address("1Dnz5FtKiRML14zBr9DFjBepXnppqnrC9g")).map(a=>(a.result(Address("1Dnz5FtKiRML14zBr9DFjBepXnppqnrC9g")))).sum)
 }
 
 object BlockchainInfoApi extends BlockchainApi {
-  //  http://blockchain.info/rawaddr/15JvRK9BJHUtqxDyrihxphX1e8e4fdjb4o
+  //  http://blockchain.info/rawaddr/1Dnz5FtKiRML14zBr9DFjBepXnppqnrC9g
   def getTransactions(a: Address): Seq[Transaction] = {
     val res = Http.get( """http://blockchain.info/rawaddr/""" + a.stringVal).option(HttpOptions.connTimeout(1000)).option(HttpOptions.readTimeout(5000)).asString
     parse(res).\("txs").children.toArray.map {
@@ -31,13 +31,13 @@ object BlockchainInfoApi extends BlockchainApi {
           cc =>
             val addr = cc.\\("addr")
             val qty = cc.\\("value")
-            TransactionInput(Address(addr.values.toString), qty.values.toString.toDouble)
+            TransactionInput(Address(addr.values.toString), qty.values.toString.toLong)
         }
         val outs = c.\("out").children.toArray.map {
           cc =>
             val addr = cc.\\("addr")
             val qty = cc.\\("value")
-            TransactionOutput(Address(addr.values.toString), qty.values.toString.toDouble)
+            TransactionOutput(Address(addr.values.toString), qty.values.toString.toLong)
         }
         val bh =  c.\("block_height").values.toString.toLong
         Transaction(ins, outs, bh)

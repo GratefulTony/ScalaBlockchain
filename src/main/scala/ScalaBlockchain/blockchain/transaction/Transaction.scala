@@ -10,10 +10,10 @@ import ScalaBlockchain.blockchain.address.Address
  * To change this template use File | Settings | File Templates.
  */
 case class TransactionOutput(toAddress: Address,
-                             value: Double)
+                             value: Long)
 
 case class TransactionInput(fromAddress: Address,
-                            value: Double)
+                            value: Long)
 
 case class Transaction(inputs: Seq[TransactionInput],
                        outputs: Seq[TransactionOutput],
