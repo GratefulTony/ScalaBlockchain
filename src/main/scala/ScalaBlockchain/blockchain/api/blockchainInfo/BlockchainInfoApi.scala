@@ -1,7 +1,7 @@
 package ScalaBlockchain.blockchain.api
 
 import ScalaBlockchain.blockchain.address.Address
-import ScalaBlockchain.blockchain.transaction.Transaction
+import ScalaBlockchain.blockchain.transaction.{TransactionInput, TransactionOutput, Transaction}
 
 import org.json4s.native.JsonMethods._
 import scalaj.http.{HttpOptions, Http}
@@ -14,21 +14,33 @@ import scalaj.http.{HttpOptions, Http}
  * To change this template use File | Settings | File Templates.
  */
 
-object BlockchainInfoApi extends BlockchainApi{
-  def getOutgoingTransactions(a:Address):Seq[Transaction] = {
-    val res = Http.get( """http://blockchain.info/rawaddr/""" + a.toString).option(HttpOptions.connTimeout(1000)).option(HttpOptions.readTimeout(5000)).asString
+object BlockchainAPIDemo extends App {
+
+  import BlockchainInfoApi._
+
+  println(getTransactions(Address("15JvRK9BJHUtqxDyrihxphX1e8e4fdjb4o")).map(a=>(a.result(Address("15JvRK9BJHUtqxDyrihxphX1e8e4fdjb4o")))).sum)
+}
+
+object BlockchainInfoApi extends BlockchainApi {
+  //  http://blockchain.info/rawaddr/15JvRK9BJHUtqxDyrihxphX1e8e4fdjb4o
+  def getTransactions(a: Address): Seq[Transaction] = {
+    val res = Http.get( """http://blockchain.info/rawaddr/""" + a.stringVal).option(HttpOptions.connTimeout(1000)).option(HttpOptions.readTimeout(5000)).asString
     parse(res).\("txs").children.toArray.map {
       c =>
-        val fs = c.\("out").children.toArray
-
-        fs.map(cc =>
-
-//          Transaction(
-//            c.toString,
-//            cc.\("addr").toString,
-//            cc.\("value").values.toString.toDouble)
-//        )
-
-    }.toSeq.flatten.toSeq
+        val ins = c.\("inputs").children.toArray.map {
+          cc =>
+            val addr = cc.\\("addr")
+            val qty = cc.\\("value")
+            TransactionInput(Address(addr.values.toString), qty.values.toString.toDouble)
+        }
+        val outs = c.\("out").children.toArray.map {
+          cc =>
+            val addr = cc.\\("addr")
+            val qty = cc.\\("value")
+            TransactionOutput(Address(addr.values.toString), qty.values.toString.toDouble)
+        }
+        val bh =  c.\("block_height").values.toString.toLong
+        Transaction(ins, outs, bh)
+    }
   }
 }

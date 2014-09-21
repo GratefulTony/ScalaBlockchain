@@ -11,5 +11,5 @@ import ScalaBlockchain.blockchain.transaction.Transaction
  * To change this template use File | Settings | File Templates.
  */
 trait BlockchainApi {
-  def getOutgoingTransactions(a:Address):Seq[Transaction]
+  def getTransactions(a:Address):Seq[Transaction]
 }
