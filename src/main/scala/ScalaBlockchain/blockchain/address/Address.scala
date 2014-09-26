@@ -9,8 +9,6 @@ package ScalaBlockchain.blockchain.address
  */
 
 
-case class Address(
-                    stringVal: String
-                    ) {
+case class Address(stringVal: String) {
   def ==(o: Address) = stringVal == o.stringVal
 }

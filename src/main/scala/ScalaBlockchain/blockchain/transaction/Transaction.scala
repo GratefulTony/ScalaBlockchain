@@ -9,7 +9,7 @@ import ScalaBlockchain.blockchain.address.Address
  * Time: 9:02 PM
  * To change this template use File | Settings | File Templates.
  */
-case class TransactionOutput(toAddress: Address,
+case class TransactionOutput(destinationAddress: Address,
                              value: Long)
 
 case class TransactionInput(fromAddress: Address,
@@ -18,7 +18,7 @@ case class TransactionInput(fromAddress: Address,
 case class Transaction(inputs: Seq[TransactionInput],
                        outputs: Seq[TransactionOutput],
                        blockHeight: Long)    {
-  def result(address:Address) = outputs.filter(a=>a.toAddress == address).map(_.value).sum - inputs.filter(a=>a.fromAddress == address).map(_.value).sum
+  def result(address:Address) = outputs.filter(a=>a.destinationAddress == address).map(_.value).sum - inputs.filter(a=>a.fromAddress == address).map(_.value).sum
 }
 
 
