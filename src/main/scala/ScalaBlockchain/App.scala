@@ -4,6 +4,6 @@ package ScalaBlockchain;
  * Hello world!
  *
  */
-object App extends Application {
-  println( "Hello World!" );
+object App extends App {
+  println( "Hello Universe!" );
 }
