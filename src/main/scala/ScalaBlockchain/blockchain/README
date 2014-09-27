@@ -1,0 +1,60 @@
+BitTrust
+========
+
+A way of interpreting blockchain transactions to allow a distributed web of trust backed by the security of Bitcoin.
+
+What is Bitcoin?
+
+Bitcoin is a revolutionary system which allows the creation and secure updating of a distributed multi-user database of small pieces of information (transactions). It is assumed that "Bitcoin" will be the generic term used to discuss the most secure implementation of such a system that facilitates financial transactions.
+
+Why use the Bitcoin network to back a web of trust when there are transaction fees/ simpler ways to implement a WoT on a dedicated system?
+
+For less-critical issues of trust it may be appropriate to use less-secure means of keeping track of who trusts whom, however, the ambition of BitTrust is to establish a system secure and efficient enough to fill roles requiring high levels of transparency and security: While BitTrust should be perfectly serviceable for keeping track of which online merchants are trustworthy, it should also work just fine as a way of conducting political elections or making policy decisions. Since it is assumed that "Bitcoin" is at a given time the most trustworthy and secure distributed database for transactions, and since we believe that the data required to represent a distribution of trust is a very similar kind of data required to represent financial transactions, we believe that it is only natural to use the blockchain to record trust relationships between addresses. Doing so will add value to the blockchain, and enhance the mutual security of the financial functionality as well as the trust-database functionality.
+
+We propose that rather than making any modifications to the Bitcoin protocol, all of the goals of BitTrust can be accomplished by inventing a new way of looking at the blockchain and by making updates to the "TrustLayer" via regular transactions-- Any updates to the means by which the Bitcoin network handles transactions are assumed only to increase security, and should not affect the functionality of the TrustLayer. As long as addresses can send transactions to other addresses, and that these transactions are permanently recorded in the blockchain, the TrustLayer will function as assumed.
+
+Why not colored coins then? We believe that colored coins are an interesting technological development that may have many advantages, and may find their way into the TrustLayer eventually, but because of the shared informatic nature of trust and financial transactions, we feel vanilla Bitcoin is the simplest and most resilient means of encoding trust transaction information into the blockchain.
+
+How does it work?
+
+The primitive proposed is a means of inferring trust, T, between any two Bitcoin addresses. 
+
+Double t = Trust(a1, a2); a1 being the truster address and a2 being the trustee address. 
+
+It is assumed that parties trusted by directly trusted parties are effectively trustworthy, so we observe that the trust network is a directed graph between addresses. Thus, if a3 is an entity with no explicit trust relationship to a1, but with a direct trust relationship to a2, we can evaluate: 
+
+Double indirectTrust = Trust(a1, a3) = Trust(a1, a2) * Trust(a2, a3)
+
+DirectTrust between two addresses is established by sending bitcoin. If a1 wants to form a direct trust link with a3, it should send the amount of bitcoin to a3 that brings the normalized trust a1->a3 to the desired level. Total Trust is the sum of all DirectTrust and IndirectTrust paths between the trustor and trustee.
+
+Since all addresses must have equal potential for affecting the trust network, the outgoing trust from one address to several peers is normalized. This prevents the case that wealthy (in bitcoin) nodes in the network would attempt to affect the trust network disproportionately to less-wealthy nodes. All addresses are created equal, and the only advantage achievable by sending a high volume of bitcoin from a trust-layer address would be to achieve a higher number of (lower weighted) peers, or higher resolution in the trust distribution outgoing from the address. Since it is assumed that the smallest unit of Bitcoin useful for establishing a trust distribution is much much smaller than the transaction fees on a trust-distribution-establishing transaction, these concerns seem minimal.
+
+if a1 sends:
+  1 satoshi to a2
+  2 satoshis to a3
+  4 satoshis to a4
+
+total satoshis sent from a1: 7
+  
+the established direct trust distribution would be read as:
+  DirectTrust(a1, a2) = 1/7
+  DirectTrust(a1, a3) = 2/7
+  DirectTrust(a1, a4) = 4/7
+  
+if the trust between a4 and another address a5 is read to be 1/20, we can easily calculate:
+  Trust(a1, a5) = Trust(a1, a4) * (Trust(a4, a5) = 1/20) = 4/7 * 1/20 = 4/140 = 1/35
+
+Since addresses can establish trust to multiple peers, it is possible for more comlex relationships between addresses to be expressed if the are connected by multiple paths. For instance, if a1 decides to establish an additional direct trust link to a5 by sending 3 satoshis, we observe that a1's direct trust outputs become:
+   DirectTrust(a1, a2) = 1/10
+   DirectTrust(a1, a3) = 2/10
+   DirectTrust(a1, a4) = 4/10
+   DirectTrust(a1, a5) = 3/10
+
+Trust(a1, a5) would now be evaluated differently since there is an additional indirect trust link from a1->a5 via a4. Trust(a1, a5) would then be calculated:
+
+  Trust(a1, a5) = **the sum of trust contributions of all possible paths a1->a5**...
+  Trust(a1, a5) = (DirectTrust(a1, a5) = 3/10) + (Trust(a2,a5) = 0) * Trust(a1, a2) + (Trust(a3, a5) = 0) * Trust(a1, a3) + (Trust(a4, a5) = 1/20) * (Trust(a1, a4) = 4/7) = (1/35 + 3/10)
+  
+  This can be efficiently calculated by propagating trust from all paths out of a1 until they reach a5. Paths closing back on a1 are ignored: a1 trusts itself by definition.
+ 
+
