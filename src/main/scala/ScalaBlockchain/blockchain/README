@@ -57,4 +57,51 @@ Trust(a1, a5) would now be evaluated differently since there is an additional in
   
   This can be efficiently calculated by propagating trust from all paths out of a1 until they reach a5. Paths closing back on a1 are ignored: a1 trusts itself by definition.
  
+Function
+========
 
+While a directed, cyclical graph can be imagined to represent a trust net, with the nodes being trustworthy addresses, and the weights of the outgoing edges corresponding to the normalized trustnet-valid outputs to other nodes.
+
+With this net structure in mind, we can proceed to add some basic features to the trustnet blockchain lens:
+
+Propagators and Outputs
+=======================
+
+One goal of the system is to facilitate trust delegation for the resolution of "question items": the canonical application for a trustnet.
+
+Imagine if a user were to create a jury application where a few trusted friends could pool their collective decision-making power to answer a simple yes/no question--
+
+"is this hat too silly to wear in public?"
+
+The following basic functionality needs to be in place:
+
+-Means for the jury to establish a trustnet among themselves, deferring hat-related questions to more knowledgeable users.
+
+-Means for jurymembers to invoke their share of the net trust to indicate a "yes" or "no" answer to the proposed question.
+
+-Means for determining who is a member of the jury, and who is not. (which addresses are in the graph)
+
+-Means for determining/calculating the trust distribution between the user and each jurymember.
+
+As discussed above, edges in the simplest trustnet correspond to the normalized valid outputs between a node address and other valid node addresses.
+
+To establish a trustnet, first, the user to invoke the network needs to enumerate the peers which are to be allowed to participate in the network. The trivial set of peers is the set of all Bitcoin addresses-- i.e. there is no restriction on participation in the decision. More complicated peer criteria can be defined arbitrarily in the specific implementation of the trustnet which is interpreting the result.
+
+After the peergroup-membership criteria are defined, the peers are given some span of time to form a trust graph among themselves by sending small transactions to one another to eventually establish the desired distributions.
+
+To establish their subsequent preference distribution for the various decision possibilities, the nodes which wish to indicate a nonzero preference for a certain category will send a distribution of satoshis to addresses which are considered valid decision possibilities by such arbitrary criteria as are used to define the valid peer list. It is assumed that decision possibilities will be nonpropagating nodes, such that they have no outgoing satoshi distribution, but only receive valid trustnet transactions-- though this is not thought to be a formal rule, and trustnet formulations could be made where there is no distinction between propagating nodes and outcome nodes.
+
+In order to determine the output of the trustnet as of some decision deadline time, the time at which the state of the network is recorded and used to calculate the various trust propagation patterns, it is suggested that a form of montecarlo be used in the event that the notwork configuration can not be computed deterministically.
+
+Various formulations of trustnet may allow for varying rules be used for the task of delineating between various types of nodes such as peergroup members and decision option nodes etc.. The exact implementation of the trustnet blockchain lens to be used should be agreed upon by members of the trustnet prior to beginning the net formation phase.
+
+One possible implementation of a trustnet can use the observation that a way of determining the role of a node in the trustnet, or the relationships between addresses is by using "marked transactions".
+
+Marked Transactions
+===================
+
+Since it is necessary to encode certain information into a trustnet regarding which nodes are intended to be interpreted as propagation
+
+
+
+We observe
