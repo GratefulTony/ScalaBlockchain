@@ -1,0 +1,8 @@
+Blockchain Voting Package
+=========================
+
+This package represents a very early attempt at using the blockchain to faciltate secure, transparent delegation voting.
+
+This is but one of many possible implementations of this type of system.
+
+In particular, a blockchain vote consists of delegation transactions and output transactions which are "marked" by including predeclared addresses in the outputs.
