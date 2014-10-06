@@ -14,7 +14,7 @@ import ScalaBlockchain.blockchain.transaction.Transaction
 trait MarkedTransactionMultiOutcomePoll extends BlockchainPoll {
 
   //every address which sends a satoshi to this address is a valid outcome. By sending satoshis, these addresses become "marked"
-  private def outcomeRegistrationAddress: Address
+  def outcomeRegistrationAddress: Address
 
   private def outcomeAddresses: Set[Address] = {
     blockchainApi.getTransactions(outcomeRegistrationAddress)

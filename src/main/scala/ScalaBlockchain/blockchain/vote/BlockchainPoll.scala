@@ -52,7 +52,7 @@ trait BlockchainPoll {
   def outcomePreferenceTransactionsOutgoingFrom(a: Address): Set[TransactionOutput]
 
   //the distribution of preference for each outcome expressed by the network.
-  def outcome: Future[Map[Address, Double]]
+  def outcome: Map[Address, Double]
 
   //the trust graph. [(trust source, trust destination), trust magnitude] raw preferences from key node, not propagated.
   def trustGraph: Map[Address, (Address, Double)]

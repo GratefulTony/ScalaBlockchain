@@ -13,7 +13,7 @@ import ScalaBlockchain.blockchain.transaction.Transaction
  */
 trait MarkedTransactionPropagatorPoll extends BlockchainPoll {
   //every address which sends a satoshi to this address is a valid propagator. By sending satoshis, these addresses become "marked"
-  private def propagatorRegistrationAddress: Address
+  def propagatorRegistrationAddress: Address
 
   private def propagationAddresses: Set[Address] = {
     blockchainApi.getTransactions(propagatorRegistrationAddress)
