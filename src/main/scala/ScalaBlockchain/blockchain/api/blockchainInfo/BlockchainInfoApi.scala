@@ -11,7 +11,6 @@ import scalaj.http.{HttpOptions, Http}
  * User: tony
  * Date: 9/13/14
  * Time: 9:11 PM
- * To change this template use File | Settings | File Templates.
  */
 
 object BlockchainAPIDemo extends App {
