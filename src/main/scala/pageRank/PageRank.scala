@@ -5,7 +5,6 @@ package pageRank
  * User: tony
  * Date: 10/5/14
  * Time: 10:18 PM
- * To change this template use File | Settings | File Templates.
  */
 
 import com.signalcollect._
@@ -21,7 +20,7 @@ object PageRankDemo extends App {
 
   val graphBuilder = Map.newBuilder[(String, String), Double]
 
-  //they have some opiniona about eachother...
+  //they have some opinions about eachother...
   //mike likes bob and alex.
   graphBuilder += (mike, bob) -> 0.5
   graphBuilder += (mike, alex) -> 0.5
@@ -29,29 +28,40 @@ object PageRankDemo extends App {
   //alex sort of likes bob
   graphBuilder += (alex, bob) -> 0.1
   //and really likes jane
-  graphBuilder += (alex,jane) -> 0.8
+  graphBuilder += (alex, jane) -> 0.9
 
   //jane only likes alex...
-  graphBuilder += (jane,alex) -> 1.0
+  graphBuilder += (jane, alex) -> 1.0
 
   //who is the most popular?
 
-  PageRank.calculate(graphBuilder.result(), (s:String)=>s)
+  PageRank.calculate(graphBuilder.result(), (b: String) => 0.1).map(println(_))
 
 }
 
 object PageRank {
-  def calculate[T](edges: Map[(T, T), Double], id: (T) => String) = {
+  def calculate[T](edges: Map[(T, T), Double], baserank: (T) => Double = (i: T) => 0.15) = {
+    // id: (T) => String
     val graph = GraphBuilder.build
 
-    val vertices = edges.keys.flatMap(k => Seq(k._1, k._2)).toSet
-    vertices.foreach(v => graph.addVertex(new PageRankVertex(id(v))))
 
-    edges.foreach(e => graph.addEdge(id(e._1._1), new PageRankEdge(id(e._1._2), e._2)))
+    val vertexIds = edges.keys.flatMap(k => Seq(k._1, k._2)).toSet
+    val vertices = vertexIds.map(v => new PageRankVertex[T](v, baserank(v)))
+
+    vertices.foreach(v => graph.addVertex(v))
+
+    edges.foreach(e => graph.addEdge(e._1._1, new PageRankEdge(e._1._2, e._2)))
 
     graph.execute
-    graph.foreachVertex(println(_))
+
+    val o = vertexIds.map {
+      v =>
+        (v, graph.forVertexWithId(v, (z: PageRankVertex[T]) => z.state))
+    }
+
     graph.shutdown
+
+    o
   }
 
 }

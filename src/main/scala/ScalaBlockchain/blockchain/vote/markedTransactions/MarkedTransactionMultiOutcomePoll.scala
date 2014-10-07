@@ -18,7 +18,7 @@ trait MarkedTransactionMultiOutcomePoll extends BlockchainPoll {
 
   private def outcomeAddresses: Set[Address] = {
     blockchainApi.getTransactions(outcomeRegistrationAddress)
-      .filter(t => t.outputs.map(_.destinationAddress).contains(outcomeRegistrationAddress))
+      .filter(t => t.outputs.map(_.destinationAddress).contains(outcomeRegistrationAddress)) //TODO: verify this "contains" works as expected!
       .flatMap(_.inputs.map(_.fromAddress)).toSet
   }
 

@@ -10,7 +10,6 @@ import scala.concurrent.Future
  * User: tony
  * Date: 9/30/14
  * Time: 5:54 PM
- * To change this template use File | Settings | File Templates.
  */
 
 trait BlockchainPoll {
@@ -54,31 +53,9 @@ trait BlockchainPoll {
   //the distribution of preference for each outcome expressed by the network.
   def outcome: Map[Address, Double]
 
-  //the trust graph. [(trust source, trust destination), trust magnitude] raw preferences from key node, not propagated.
-  def trustGraph: Map[Address, (Address, Double)]
+  //the trust graph edges. [(trust source, trust destination), trust magnitude] raw preferences from key node, not propagated.
+  def trustGraph: Map[(Address, Address), Double]
 
   //a place to get blockchain data
   def blockchainApi: BlockchainApi
 }
-
-//trait ExhaustiveMemberDiscovery extends BlockchainPoll {
-//  override def allPropagators: Set[Address] = {
-//
-//    def explore(a: Address, explored: Set[Address]): Set[Address] = {
-//      if (validPropagationAddress(a)) {
-//        val trustees = propagationTransactionsOutgoingFrom(a)
-//          .flatMap(t => t.outputs.map(_.destinationAddress))
-//          .filter(validPropagationAddress)
-//
-//        val newlyExplored = trustees.toSet -- explored - a
-//        val childrenOfNewlyExplored = newlyExplored.flatMap(explore(_, explored ++ newlyExplored + a))
-//
-//        explored ++ trustees ++ childrenOfNewlyExplored + a
-//      }
-//      else Set.empty
-//    }
-//
-//    trustSourceAddresses.flatMap(explore(_, Set.empty))
-//  }
-//}
-//

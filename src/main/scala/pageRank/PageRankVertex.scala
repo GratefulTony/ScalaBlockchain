@@ -7,9 +7,9 @@ import com.signalcollect.{DefaultEdge, DataGraphVertex}
  * User: tony
  * Date: 10/5/14
  * Time: 10:16 PM
- * To change this template use File | Settings | File Templates.
  */
-class PageRankVertex(id: String, baseRank: Double = 0.15)
+
+class PageRankVertex[T](id: T, baseRank: Double = 0.15)
   extends DataGraphVertex(id, baseRank) {
   type Signal = Double
   def dampingFactor = 1 - baseRank
@@ -17,9 +17,9 @@ class PageRankVertex(id: String, baseRank: Double = 0.15)
 
 }
 
-class PageRankEdge(targetId: String, weightIn:Double = 1.0)
+class PageRankEdge[T](targetId: T, weightIn:Double = 1.0)
   extends DefaultEdge(targetId) {
-  type Source = PageRankVertex
+  type Source = PageRankVertex[T]
   def signal = source.state * weight / source.sumOfOutWeights
   override def weight = weightIn
 }
