@@ -36,7 +36,7 @@ trait BlockchainPoll {
   def allOutcomes: Set[Address]
 
   //this helps us determine how much a truster trusts a trustee-- essentially trust propagation.
-  def propagatedTrust(truster: Address, trustee: Address):Double
+//  def propagatedTrust(truster: Address, trustee: Address):Double
 
   //maybe we want to be able to attach some notes to addresses...
   def comments(a: Address): String

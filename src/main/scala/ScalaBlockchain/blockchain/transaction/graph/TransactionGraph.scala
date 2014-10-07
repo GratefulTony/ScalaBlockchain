@@ -27,8 +27,6 @@ trait NormalizedTransactionTrustGraph extends BlockchainPoll{
     normalizedTotalOutputs.map(no=>(a,no._1)->no._2)
   }
 
-  def getPropagatedOutputsDistribution(a: Address): Map[Address, Double]
-
   override def trustGraph:Map[(Address,Address),Double] =
     allPropagators.flatMap{p=>getNeighborOutputsDistribution(p)}.toMap
 }

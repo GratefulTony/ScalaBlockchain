@@ -3,7 +3,8 @@ package ScalaBlockchain.blockchain.vote.markedTransactions
 import ScalaBlockchain.blockchain.vote.BlockchainPoll
 import ScalaBlockchain.blockchain.address.Address
 import ScalaBlockchain.blockchain.api.{BlockchainInfoApi, BlockchainApi}
-import scala.concurrent.Future
+import ScalaBlockchain.blockchain.transaction.graph.NormalizedTransactionTrustGraph
+import ScalaBlockchain.blockchain.transaction.graph.pageRankTrustPropagation.PageRankTrustPropagation
 
 
 /**
@@ -13,7 +14,7 @@ import scala.concurrent.Future
  * Time: 8:00 PM
  */
 
-abstract class SimpleMarkedTransactionPoll(propagatorRegistrationAddressIn: Address, outcomeRegistrationAddressIn: Address) extends BlockchainPoll with MarkedTransactionMultiOutcomePoll with MarkedTransactionPropagatorPoll {
+class SimpleMarkedTransactionPoll(propagatorRegistrationAddressIn: Address, outcomeRegistrationAddressIn: Address) extends BlockchainPoll with MarkedTransactionMultiOutcomePoll with MarkedTransactionPropagatorPoll with NormalizedTransactionTrustGraph with PageRankTrustPropagation {
   val description: String = "this poll is a free for all. Anyone can register his or herself as a node, and any address can be registered as a valid outcome"
 
   //maybe we want to be able to attach some notes to addresses...
@@ -30,7 +31,4 @@ abstract class SimpleMarkedTransactionPoll(propagatorRegistrationAddressIn: Addr
 
   //every address which sends a satoshi to this address is a valid outcome. By sending satoshis, these addresses become "marked"
   def outcomeRegistrationAddress: Address = outcomeRegistrationAddressIn
-
-
-
 }

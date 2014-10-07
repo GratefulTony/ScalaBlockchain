@@ -57,7 +57,7 @@ object PageRank {
     val o = vertexIds.map {
       v =>
         (v, graph.forVertexWithId(v, (z: PageRankVertex[T]) => z.state))
-    }
+    }.toMap
 
     graph.shutdown
 
