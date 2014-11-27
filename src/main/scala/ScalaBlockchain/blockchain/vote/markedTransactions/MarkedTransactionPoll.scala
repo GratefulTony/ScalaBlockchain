@@ -161,7 +161,7 @@ class SimpleMarkedTransactionPollClient(poll: SimpleMarkedTransactionPoll, walle
 
   def originSpendableOutputs = (try {
     val ts = wallet.getTransactions(false).asScala
-    ts.map("transact: " + println(_))
+    ts.map("transact:  " + println(_))
     ts
   }
   catch {
