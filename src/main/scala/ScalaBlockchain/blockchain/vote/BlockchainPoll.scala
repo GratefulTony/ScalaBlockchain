@@ -3,7 +3,6 @@ package ScalaBlockchain.blockchain.vote
 import ScalaBlockchain.blockchain.address.Address
 import ScalaBlockchain.blockchain.transaction.{TransactionOutput, Transaction}
 import ScalaBlockchain.blockchain.api.BlockchainApi
-import scala.concurrent.Future
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,7 +26,7 @@ trait BlockchainPoll {
   def allPropagators: Set[Address]
 
   //this function determines whether a transaction can specify a preference between a propagation node and an outcome
-  def validOutcomeSelectionTransaction(t: Transaction)   :Boolean
+  def validOutcomeSelectionTransaction(t: Transaction): Boolean
 
   //this function tells us if a particular address is a valid "choice" in the poll.
   def validOutcomeAddress(a: Address): Boolean
@@ -36,7 +35,7 @@ trait BlockchainPoll {
   def allOutcomes: Set[Address]
 
   //this helps us determine how much a truster trusts a trustee-- essentially trust propagation.
-//  def propagatedTrust(truster: Address, trustee: Address):Double
+  //  def propagatedTrust(truster: Address, trustee: Address):Double
 
   //maybe we want to be able to attach some notes to addresses...
   def comments(a: Address): String
@@ -51,7 +50,7 @@ trait BlockchainPoll {
   def outcomePreferenceTransactionsOutgoingFrom(a: Address): Set[TransactionOutput]
 
   //the distribution of preference for each outcome expressed by the network.
-  def outcome: Map[Address, Double]
+  def outcome(seedTrust: Map[Address, Double] = trustSourceAddresses.map(a => a -> 1.0).toMap): Map[Address, Double]
 
   //the trust graph edges. [(trust source, trust destination), trust magnitude] raw preferences from key node, not propagated.
   def trustGraph: Map[(Address, Address), Double]

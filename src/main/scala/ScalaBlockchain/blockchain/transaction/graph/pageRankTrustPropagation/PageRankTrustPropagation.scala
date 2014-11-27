@@ -13,9 +13,8 @@ import ScalaBlockchain.blockchain.vote.BlockchainPoll
  * To change this template use File | Settings | File Templates.
  */
 trait PageRankTrustPropagation extends BlockchainPoll {
-  override def outcome: Map[Address, Double] = {
-    val initialMass = trustSourceAddresses.size.toDouble
-    val unnorm = PageRank.calculate(trustGraph, (a: Address) => if (this.trustSourceAddresses.contains(a)) initialMass else 0.0)
+  override def outcome(seedTrust: Map[Address, Double]): Map[Address, Double] = {
+    val unnorm = PageRank.calculate[Address](trustGraph, (a => seedTrust.getOrElse(a, 0.0)))
     val normFactor = unnorm.map(_._2).sum
     unnorm.mapValues(_ / normFactor)
   }
