@@ -1,3 +1,3 @@
 This project contains bindings for a very basic bitcoin api for the Scala programming language.
 
-The system is being written primarily to support the BlockchainPoll system, which uses the vanilla blockchain to implement transparent delegation voting without resorting to incumberances such as colored coins.
+The system is being written primarily to support the BlockchainPoll system, which uses the vanilla blockchain to implement transparent delegation voting without resorting to encumbrances such as colored coins.
